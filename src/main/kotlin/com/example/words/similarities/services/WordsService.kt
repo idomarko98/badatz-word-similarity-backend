@@ -4,16 +4,14 @@ import com.example.words.similarities.entities.SimilarResult
 import com.example.words.similarities.entities.Word
 import com.example.words.similarities.repos.WordsRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DuplicateKeyException
 import org.springframework.stereotype.Service
-import java.time.Instant
 
 @Service
 class WordsService(@Autowired val wordsRepository: WordsRepository) {
 
     fun getSimilarWords(word: String): SimilarResult {
-        val wordArray = word.toCharArray()
-        wordArray.sort()
-        val keyWord = wordArray.joinToString("")
+        val keyWord = sortString(word)
 
         val similarWords = wordsRepository.findAllByKeyWord(keyWord)
         val similarResultList = mutableListOf<String>()
@@ -22,5 +20,31 @@ class WordsService(@Autowired val wordsRepository: WordsRepository) {
         }
 
         return SimilarResult(similarResultList)
+    }
+
+    fun addNewWord(word: String) {
+        if(word == "")
+        {
+            throw Exception("Bad argument - empty word")
+        }
+
+        if(wordExistsInDict(word)){
+            throw DuplicateKeyException("$word is already in dictionary")
+        }
+
+        val wordKey = sortString(word)
+        val wordToSave = Word(wordKey, word)
+
+        wordsRepository.save(wordToSave)
+    }
+
+    private fun sortString(string: String): String{
+        val stringArray = string.toCharArray()
+        stringArray.sort()
+        return stringArray.joinToString("")
+    }
+
+    private fun wordExistsInDict(word: String): Boolean {
+        return wordsRepository.findAllByWord(word).isNotEmpty()
     }
 }

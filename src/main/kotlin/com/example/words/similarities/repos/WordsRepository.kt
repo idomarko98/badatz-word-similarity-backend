@@ -12,4 +12,8 @@ interface WordsRepository : CrudRepository<Word, WordId> {
 
     @Query(value = "SELECT * FROM words WHERE word_key = :word_key", nativeQuery = true)
     fun findAllByKeyWord(@Param("word_key") wordKey: String): List<Word>
+
+    @Query(value = "SELECT * FROM words WHERE word = :word", nativeQuery = true)
+    fun findAllByWord(@Param("word") word: String): List<Word>
+
 }

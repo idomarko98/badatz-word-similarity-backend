@@ -4,10 +4,10 @@ import com.example.words.similarities.entities.SimilarResult
 import com.example.words.similarities.entities.Word
 import com.example.words.similarities.repos.WordsRepository
 import com.example.words.similarities.services.WordsService
-import io.mockk.every
-import io.mockk.mockk
+import io.mockk.*
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import java.time.Instant
 
 @SpringBootTest
 class WordsServiceTest() {
@@ -31,7 +31,26 @@ class WordsServiceTest() {
 
         val actualListResult = wordService.getSimilarWords(word)
 
-        assert(actualListResult.equals(expectedSimilarResult))
-
+        assert(actualListResult == expectedSimilarResult)
     }
+
+    @Test
+    fun `Given a word to add, When adding, save word to dictionary`(){
+        val fixedInstant = Instant.parse("2022-01-01T00:00:00Z")
+        mockkStatic(Instant::class).run {
+            every { Instant.now() } returns fixedInstant
+        }
+        val wordString = "apple"
+        val wordKey = "aelpp"
+        val wordToSave = Word(wordKey, wordString)
+
+        every { mockedWordsRepository.findAllByWord(wordString) } returns listOf()
+        every { mockedWordsRepository.save(wordToSave) } returns mockk<Word>()
+
+        wordService.addNewWord(wordString)
+
+        verify { mockedWordsRepository.save(wordToSave) }
+    }
+
+
 }
