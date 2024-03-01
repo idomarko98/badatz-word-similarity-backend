@@ -6,11 +6,13 @@ import com.example.words.similarities.repos.WordsRepository
 import com.example.words.similarities.services.WordsService
 import io.mockk.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.dao.DuplicateKeyException
 import java.time.Instant
 
 @SpringBootTest
-class WordsServiceTest() {
+class WordsServiceTest {
 
     private final val mockedWordsRepository = mockk<WordsRepository>()
 
@@ -35,7 +37,7 @@ class WordsServiceTest() {
     }
 
     @Test
-    fun `Given a word to add, When adding, save word to dictionary`(){
+    fun `Given a word to add, When adding, save word to dictionary`() {
         val fixedInstant = Instant.parse("2022-01-01T00:00:00Z")
         mockkStatic(Instant::class).run {
             every { Instant.now() } returns fixedInstant
@@ -52,5 +54,27 @@ class WordsServiceTest() {
         verify { mockedWordsRepository.save(wordToSave) }
     }
 
+    @Test
+    fun `Given an empty word to add, When adding, throw error`() {
+        val wordString = ""
 
+        assertThrows(Exception::class.java) {
+            wordService.addNewWord(wordString)
+        }
+
+    }
+
+    @Test
+    fun `Given an existing word to add, When adding, throw duplicate error`() {
+        val wordString = "apple"
+        val wordKey = "aelpp"
+        val existingWord = Word(wordKey, wordString)
+
+        every { mockedWordsRepository.findAllByWord(wordString) } returns listOf(existingWord)
+
+        assertThrows(DuplicateKeyException::class.java) {
+            wordService.addNewWord(wordString)
+        }
+
+    }
 }
