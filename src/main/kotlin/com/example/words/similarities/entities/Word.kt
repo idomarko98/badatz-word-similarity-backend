@@ -11,9 +11,9 @@ import java.time.Instant
 @IdClass(WordId::class)
 class Word(wordKey: String = "", word: String = "", timestamp: Instant = Instant.now()) {
     @Id
-    val wordKey: String = ""
+    val wordKey: String = wordKey
 
     @Id
-    val word: String = ""
-    val timestamp: Instant = Instant.now()
+    val word: String = word
+    val timestamp: Instant = timestamp
 }
