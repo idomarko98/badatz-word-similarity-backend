@@ -2,13 +2,14 @@ package com.example.words.similarities
 
 import com.example.words.similarities.entities.SimilarResult
 import com.example.words.similarities.entities.Word
+import com.example.words.similarities.exception.BadRequestException
+import com.example.words.similarities.exception.DuplicateKeyException
 import com.example.words.similarities.repos.WordsRepository
 import com.example.words.similarities.services.WordsService
 import io.mockk.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.dao.DuplicateKeyException
 import java.time.Instant
 
 @SpringBootTest
@@ -58,7 +59,7 @@ class WordsServiceTest {
     fun `Given an empty word to add, When adding, throw error`() {
         val wordString = ""
 
-        assertThrows(Exception::class.java) {
+        assertThrows(BadRequestException::class.java) {
             wordService.addNewWord(wordString)
         }
 

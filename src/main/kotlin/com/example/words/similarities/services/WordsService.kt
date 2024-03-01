@@ -2,9 +2,10 @@ package com.example.words.similarities.services
 
 import com.example.words.similarities.entities.SimilarResult
 import com.example.words.similarities.entities.Word
+import com.example.words.similarities.exception.BadRequestException
+import com.example.words.similarities.exception.DuplicateKeyException
 import com.example.words.similarities.repos.WordsRepository
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.dao.DuplicateKeyException
 import org.springframework.stereotype.Service
 
 @Service
@@ -25,7 +26,7 @@ class WordsService(@Autowired val wordsRepository: WordsRepository) {
     fun addNewWord(word: String) {
         if(word == "")
         {
-            throw Exception("Bad argument - empty word")
+            throw BadRequestException("Bad argument - empty word")
         }
 
         if(wordExistsInDict(word)){
