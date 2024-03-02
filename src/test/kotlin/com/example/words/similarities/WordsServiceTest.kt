@@ -5,19 +5,23 @@ import com.example.words.similarities.entities.Word
 import com.example.words.similarities.exception.BadRequestException
 import com.example.words.similarities.exception.DuplicateKeyException
 import com.example.words.similarities.repos.WordsRepository
+import com.example.words.similarities.services.StatsService
 import com.example.words.similarities.services.WordsService
 import io.mockk.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.springframework.boot.test.context.SpringBootTest
+import kotlin.time.Duration
 import java.time.Instant
+import kotlin.time.measureTime
 
 @SpringBootTest
 class WordsServiceTest {
 
     private final val mockedWordsRepository = mockk<WordsRepository>()
+    private final val mockedStatsService = mockk<StatsService>()
 
-    val wordService = WordsService(mockedWordsRepository)
+    val wordService = WordsService(mockedWordsRepository, mockedStatsService)
 
     @Test
     fun `Given a word, When trying to find similar words, return similar words`() {
@@ -31,9 +35,11 @@ class WordsServiceTest {
         val expectedWordList = listOf(firstExpectedWord, secondExpectedWord)
 
         every { mockedWordsRepository.findAllByKeyWord(expectedKeyWord) } returns expectedWordList
+        justRun { mockedStatsService.saveRequestStat(any()) }
 
         val actualListResult = wordService.getSimilarWords(word)
 
+        verify { mockedStatsService.saveRequestStat(any()) }
         assert(actualListResult == expectedSimilarResult)
     }
 
