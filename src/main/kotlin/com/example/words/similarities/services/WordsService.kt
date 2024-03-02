@@ -42,11 +42,38 @@ class WordsService(
             throw DuplicateKeyException("$word is already in dictionary")
         }
 
-        val lowercaseWord = word.lowercase()
-        val wordKey = sortString(lowercaseWord)
-        val wordToSave = Word(wordKey, lowercaseWord)
+        val wordToSave = createWordToSave(word)
 
         wordsRepository.save(wordToSave)
+    }
+
+    fun getNumberOfWords(): Long {
+        return wordsRepository.count()
+    }
+
+    fun addNewWords(wordsList: MutableList<String>) {
+        val wordsToSave = mutableListOf<Word>()
+        val BATCH_SIZE = 1000
+
+        for(word in wordsList){
+            if (word != ""){
+                val newWordToSave = createWordToSave(word)
+                wordsToSave.add(newWordToSave)
+            }
+
+            if(wordsToSave.size == BATCH_SIZE){
+                wordsRepository.saveAll(wordsToSave)
+                wordsToSave.clear()
+            }
+        }
+
+        wordsRepository.saveAll(wordsToSave)
+    }
+
+    private fun createWordToSave(word: String): Word {
+        val lowercaseWord = word.lowercase()
+        val wordKey = sortString(lowercaseWord)
+        return  Word(wordKey, lowercaseWord)
     }
 
     private fun sortString(string: String): String {
