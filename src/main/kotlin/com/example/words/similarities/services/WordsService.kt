@@ -20,7 +20,7 @@ class WordsService(
         val similarResultList = mutableListOf<String>()
 
         val processingTime = measureTime {
-            val keyWord = sortString(word)
+            val keyWord = sortString(word.lowercase())
 
             val similarWords = wordsRepository.findAllByKeyWord(keyWord)
             for (similarWord in similarWords) {
@@ -42,8 +42,9 @@ class WordsService(
             throw DuplicateKeyException("$word is already in dictionary")
         }
 
-        val wordKey = sortString(word)
-        val wordToSave = Word(wordKey, word)
+        val lowercaseWord = word.lowercase()
+        val wordKey = sortString(lowercaseWord)
+        val wordToSave = Word(wordKey, lowercaseWord)
 
         wordsRepository.save(wordToSave)
     }
