@@ -5,11 +5,13 @@ import com.example.words.similarities.repos.ApiRequestsRepository
 import com.example.words.similarities.repos.WordsRepository
 import com.example.words.similarities.services.StatsService
 import io.mockk.*
+import org.aspectj.lang.annotation.After
+import org.aspectj.lang.annotation.Before
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.Instant
 
-@SpringBootTest
+@SpringBootTest(classes = [StatsServiceTest::class])
 class StatsServiceTest {
 
     private final val mockedWordsRepository = mockk<WordsRepository>()

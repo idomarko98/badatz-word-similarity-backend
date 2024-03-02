@@ -9,7 +9,7 @@ import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
-@SpringBootTest
+@SpringBootTest(classes = [DictionaryMinerTest::class])
 class DictionaryMinerTest {
 
     private val wordsService = mockk<WordsService>()

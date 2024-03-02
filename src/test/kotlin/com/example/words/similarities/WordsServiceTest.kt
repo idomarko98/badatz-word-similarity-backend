@@ -8,20 +8,25 @@ import com.example.words.similarities.repos.WordsRepository
 import com.example.words.similarities.services.StatsService
 import com.example.words.similarities.services.WordsService
 import io.mockk.*
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import kotlin.time.Duration
 import java.time.Instant
-import kotlin.time.measureTime
 
-@SpringBootTest
+
+@SpringBootTest(classes = [WordsServiceTest::class])
 class WordsServiceTest {
 
     private final val mockedWordsRepository = mockk<WordsRepository>()
     private final val mockedStatsService = mockk<StatsService>()
 
     val wordService = WordsService(mockedWordsRepository, mockedStatsService)
+
+    @AfterEach
+    fun tearDown() {
+        unmockkAll()
+    }
 
     @Test
     fun `Given a word, When trying to find similar words, return similar words`() {
