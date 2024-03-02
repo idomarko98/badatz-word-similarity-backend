@@ -6,21 +6,24 @@ Clone Repo.
 Run docker-compose file:
 
 
-""" services:
+``` services:
   db:
       image: postgres
       restart: always
       environment:
         POSTGRES_USER: user
-        POSTGRES_PASSWORD: 
+        POSTGRES_PASSWORD: pass123
       ports:
       - "5432:5432"
 
   words-similiarities:
     build: ./backend/badatz-word-similarity-backend/
+    depends_on:
+      - db
     ports:
       - "8080:8080"
-      - "80:8080 """"
+      - "80:8080"
+```
 
 On first start, might take around 15 mintues to index the dictionary.
 
