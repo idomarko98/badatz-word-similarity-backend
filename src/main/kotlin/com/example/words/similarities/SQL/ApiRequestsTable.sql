@@ -1,4 +1,4 @@
 CREATE TABLE api_requests (
     timestamp TIMESTAMP,
-    process_time: DOUBLE
+    process_time FLOAT
 );
