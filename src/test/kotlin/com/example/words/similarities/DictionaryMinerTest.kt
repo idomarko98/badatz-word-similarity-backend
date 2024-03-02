@@ -1,6 +1,5 @@
 package com.example.words.similarities
 
-import com.example.words.similarities.entities.StatsResult
 import com.example.words.similarities.services.DictionaryMinerService
 import com.example.words.similarities.services.WordsService
 import io.mockk.every
@@ -30,4 +29,22 @@ class DictionaryMinerTest {
         verify { wordsService.addNewWord("Dataset") }
         verify { wordsService.addNewWord("Apple") }
     }
+
+//    @Test
+//    fun `Given empty dictionary, When check if should mine, Then return true`(){
+//        every { wordsService.getNumberOfWords() } returns 0
+//
+//        dictionaryMinerService.startMining()
+//
+//        verify(atLeast = 1) { wordsService.addNewWord(any()) }
+//    }
+//
+//    @Test
+//    fun `Given a full dictionary, When check if should mine, Then return false`(){
+//        every { wordsService.getNumberOfWords() } returns 100
+//
+//        dictionaryMinerService.startMining()
+//
+//        verify(exactly = 0) { wordsService.addNewWord(any()) }
+//    }
 }
