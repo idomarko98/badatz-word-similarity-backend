@@ -24,7 +24,7 @@ class WordsService(
 
             val similarWords = wordsRepository.findAllByKeyWord(keyWord)
             for (similarWord in similarWords) {
-                similarResultList.addLast(similarWord.word)
+                similarResultList.add(similarWord.word)
             }
         }
 
