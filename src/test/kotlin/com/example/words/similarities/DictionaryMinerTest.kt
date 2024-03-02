@@ -19,15 +19,13 @@ class DictionaryMinerTest {
     @Test
     fun `Given path to dictionary, When mining, Then save words to DB`() {
         val path = "src/test/kotlin/resources/words_dataset.txt"
-        justRun { wordsService.addNewWord("Blink") }
-        justRun { wordsService.addNewWord("Dataset") }
-        justRun { wordsService.addNewWord("Apple") }
+        val wordsList = mutableListOf("Blink", "Dataset", "Apple")
+        justRun { wordsService.addNewWords(wordsList) }
 
         dictionaryMinerService.mineDictionary(path)
 
-        verify { wordsService.addNewWord("Blink") }
-        verify { wordsService.addNewWord("Dataset") }
-        verify { wordsService.addNewWord("Apple") }
+        verify { wordsService.addNewWords(wordsList) }
+
     }
-    
+
 }
