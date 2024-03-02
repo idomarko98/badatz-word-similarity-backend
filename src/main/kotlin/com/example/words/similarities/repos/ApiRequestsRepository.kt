@@ -26,9 +26,6 @@ interface ApiRequestsRepository : CrudRepository<ApiRequest, ApiRequestId> {
         @Param("to_date") toDate: Instant?
     ): Double?
 
-    @Query(value = "SELECT count(*) FROM api_requests WHERE :where_query", nativeQuery = true)
-    fun countWithTimeFrame(@Param("where_query") whereQuery: String): Int
-
     @Query(
         value = """
             SELECT count(*)
