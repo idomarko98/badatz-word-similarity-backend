@@ -7,6 +7,7 @@ import com.example.words.similarities.services.StatsService
 import com.example.words.similarities.services.WordsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import java.time.Instant
 
 @RestController
 class MainController(@Autowired val wordsService: WordsService, @Autowired val statsService: StatsService) {
@@ -17,8 +18,8 @@ class MainController(@Autowired val wordsService: WordsService, @Autowired val s
     }
 
     @GetMapping("/api/v1/stats")
-    fun getStats(): StatsResult {
-        return statsService.getStats()
+    fun getStats(@RequestParam from: Instant?, @RequestParam to: Instant?): StatsResult {
+        return statsService.getStats(from, to)
     }
 
     @PostMapping("/api/v1/add-word")
