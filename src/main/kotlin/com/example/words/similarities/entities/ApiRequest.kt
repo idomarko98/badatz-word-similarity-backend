@@ -9,7 +9,7 @@ import java.time.Instant
 @Entity
 @Table(name = "api_requests")
 @IdClass(ApiRequestId::class)
-class ApiRequest(@Id val timestamp: Instant = Instant.now(),@Id val processTime: Double) {
+class ApiRequest(@Id val timestamp: Instant = Instant.now(),@Id val processTime: Double = 0.0) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
